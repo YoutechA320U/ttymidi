@@ -18,7 +18,7 @@
     Additional Info
     *********************
     The original ttymidi application did not support sysex messages. This version does.
-	Based it on the work of johnty/ttymidi-icubex.c (see https://gist.github.com/johnty/de8b3d3041c7ee43accd)
+	Based it on the work of sixeight7/ttymidi.c (see https://github.com/sixeight7/ttymidi/blob/master/ttymidi.c)
     
     The other change from original ttymidi code is that the MIDI por type being created: 
     the bit SND_SEQ_PORT_TYPE_MIDI_GENERIC was added so that the virtual port 
@@ -28,10 +28,9 @@
 
 	Developed on Raspbian GNU/Linux 8 (jessie)
 	
-    Created December 2014 by Johnty Wang [johntywang@infusionsystems.com]
-	Updated March 2017 by Catrinus Feddema
+    Created December 2017 by by Catrinus Feddema
+	Updated March 2019 by YoutechA320U
 */
-
 
 #include <stdlib.h>
 #include <string.h>
@@ -260,9 +259,8 @@ void write_midi_action_to_serial_port(snd_seq_t* seq_handle)
 
 			case SND_SEQ_EVENT_PITCHBEND:
 				bytes[0] = 0xE0 + ev->data.control.channel;
-				ev->data.control.value += 8192;
-				bytes[1] = (int)ev->data.control.value & 0x7F;
-				bytes[2] = (int)ev->data.control.value >> 7;
+				bytes[1] = ev->data.control.param;
+				bytes[2] = ev->data.control.value;
 				if (!arguments.silent && arguments.verbose)
 					printf("Alsa    0x%02X Pitch bend         %03u %5d\n", bytes[0]&0xF0, bytes[0]&0xF, ev->data.control.value);
 				break;
@@ -423,10 +421,9 @@ void write_midi_to_alsa(snd_seq_t* seq, int port_out_id, char *buf, int buflen)
 			break;
 
 		case 0xE0:
-			param1 = (param1 & 0x7F) + ((param2 & 0x7F) << 7);
 			if (!arguments.silent && arguments.verbose)
-				printf("Serial  0x%02X Pitch bend         %03u %05i\n", operation, channel, param1);
-			snd_seq_ev_set_pitchbend(&ev, channel, param1 - 8192); // in alsa MIDI we want signed int
+				printf("Serial  0x%02X Pitch bend         %03u %05i\n", operation, channel, param2 << 7 + param1 - 8192);
+			snd_seq_ev_set_controller(&ev, channel, param1, param2);
 			break;
 
 		case 0xF0:
@@ -643,4 +640,3 @@ main(int argc, char** argv)
 	tcsetattr(serial, TCSANOW, &oldtio);
 	printf("\ndone!\n");
 }
-

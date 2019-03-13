@@ -261,8 +261,8 @@ void write_midi_action_to_serial_port(snd_seq_t* seq_handle)
 			case SND_SEQ_EVENT_PITCHBEND:
 				bytes[0] = 0xE0 + ev->data.control.channel;
 				ev->data.control.value += 8192;
-				bytes[1] = (int)ev->data.control.value & 0x7F;
-				bytes[2] = (int)ev->data.control.value * 0x80;
+				bytes[1] = (int)ev->data.control.value;
+				bytes[2] = (int)ev->data.control.value;
 				if (!arguments.silent && arguments.verbose)
 					printf("Alsa    0x%02X Pitch bend         %03u %5d\n", bytes[0]&0xF0, bytes[0]&0xF, ev->data.control.value);
 				break;

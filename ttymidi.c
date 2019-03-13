@@ -18,7 +18,7 @@
     Additional Info
     *********************
     The original ttymidi application did not support sysex messages. This version does.
-	Based it on the work of sixeight7/ttymidi.c (see https://github.com/sixeight7/ttymidi/blob/master/ttymidi.c)
+	Based it on the work of johnty/ttymidi-icubex.c (see https://gist.github.com/johnty/de8b3d3041c7ee43accd)
     
     The other change from original ttymidi code is that the MIDI por type being created: 
     the bit SND_SEQ_PORT_TYPE_MIDI_GENERIC was added so that the virtual port 
@@ -28,9 +28,10 @@
 
 	Developed on Raspbian GNU/Linux 8 (jessie)
 	
-    Created December 2017 by by Catrinus Feddema
-	Updated March 2019 by YoutechA320U
+    Created December 2014 by Johnty Wang [johntywang@infusionsystems.com]
+	Updated March 2017 by Catrinus Feddema
 */
+
 
 #include <stdlib.h>
 #include <string.h>
@@ -422,8 +423,8 @@ void write_midi_to_alsa(snd_seq_t* seq, int port_out_id, char *buf, int buflen)
 
 		case 0xE0:
 			if (!arguments.silent && arguments.verbose)
-				printf("Serial  0x%02X Pitch bend         %03u %05i\n", operation, channel, param2 << 7 + param1 - 8192);
-			snd_seq_ev_set_controller(&ev, channel, param1, param2);
+				printf("Serial  0x%02X Pitch bend         %03u %05i\n", operation, channel, param1);
+			snd_seq_ev_set_controller(&ev, channel, param1, param2); // in alsa MIDI we want signed int
 			break;
 
 		case 0xF0:

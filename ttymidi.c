@@ -424,7 +424,7 @@ void write_midi_to_alsa(snd_seq_t* seq, int port_out_id, char *buf, int buflen)
 		case 0xE0:
 			if (!arguments.silent && arguments.verbose)
 				printf("Serial  0x%02X Pitch bend         %03u %05i\n", operation, channel, param1);
-			snd_seq_ev_set_controller(&ev, channel, param1, param2); // in alsa MIDI we want signed int
+			snd_seq_ev_set_controller(&ev, channel, param1, param2);
 			break;
 
 		case 0xF0:
@@ -463,7 +463,7 @@ int get_bytes_expected(int midicommand) {
       case 0xb0: return 2; // continuous controller
       case 0xc0: return 1; // patch change
       case 0xd0: return 1; // channel pressure
-      case 0xe0: return 1; // pitch bend
+      case 0xe0: return 2; // pitch bend
       case 0xf0: 
 		if (midicommand == 0xF0) return BUF_SIZE - 1; // Sysex
 		else return 0; // Other controller

@@ -422,7 +422,6 @@ void write_midi_to_alsa(snd_seq_t* seq, int port_out_id, char *buf, int buflen)
 			break;
 
 		case 0xE0:
-			//param1 = (param1 & 0x7F) + ((param2 & 0x7F) << 7);
 			param1 = (param1 & 0x7F) + ((param2 & 0x7F) << 7);
 			if (!arguments.silent && arguments.verbose)
 				printf("Serial  0x%02X Pitch bend         %03u %05i\n", operation, channel, param1);

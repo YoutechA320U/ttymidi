@@ -260,7 +260,7 @@ void write_midi_action_to_serial_port(snd_seq_t* seq_handle)
 
 			case SND_SEQ_EVENT_PITCHBEND:
 				bytes[0] = 0xE0 + ev->data.control.channel;
-				ev->data.control.value += 8192;
+				//ev->data.control.value += 8192;
 				bytes[1] = (int)ev->data.control.value;
 				bytes[2] = (int)ev->data.control.value * 0x80;
 				if (!arguments.silent && arguments.verbose)
@@ -427,7 +427,7 @@ void write_midi_to_alsa(snd_seq_t* seq, int port_out_id, char *buf, int buflen)
 			param1 = (0x80*param2) + (param1);
 			if (!arguments.silent && arguments.verbose)
 				printf("Serial  0x%02X Pitch bend         %03u %05i\n", operation, channel, param1);
-			snd_seq_ev_set_pitchbend(&ev, channel, param1 -8192); // in alsa MIDI we want signed int
+			snd_seq_ev_set_pitchbend(&ev, channel, param1); // in alsa MIDI we want signed int
 			break;
 
 		case 0xF0:

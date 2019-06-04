@@ -3,6 +3,6 @@
 
 以下のコマンドでコンパイルできます。Raspbian Stretchで動作確認済みです。
 
-to compile: gcc ttymidi.c -o ttymidi -lasound -pthread
+gcc ttymidi.c -o ttymidi -lasound -pthread
 
 使い方はオリジナルのttymidiと同じです。

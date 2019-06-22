@@ -26,10 +26,10 @@
     
     to compile: gcc ttymidi.c -o ttymidi -lasound -pthread
 
-	Developed on Raspbian GNU/Linux 8 (jessie)
+	Developed on RaspbianStrech
 	
-    Created December 2014 by Johnty Wang [johntywang@infusionsystems.com]
-	Updated March 2017 by Catrinus Feddema
+    Created December 2019 by YoutechA320U
+	
 */
 
 
